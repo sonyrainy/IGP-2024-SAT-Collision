@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.LogError("총알 프리팹 또는 firePoint가 설정되지 않았습니다.");
+            Debug.LogError("Bullet prefab이나 firePoint가 설정되지 않았다.");
         }
     }
 
