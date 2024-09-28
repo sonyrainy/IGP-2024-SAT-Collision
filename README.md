@@ -46,7 +46,7 @@
 <br>
 
 <div align="center">
-    <img src="https://github.com/user-attachments/assets/acc8956e-4fae-4486-a204-233aebbe9ae0" alt="image" width="550" height="300">
+    <img src="https://github.com/user-attachments/assets/acc8956e-4fae-4486-a204-233aebbe9ae0" alt="image" width="550" height="270">
 </div>
 
 <br>
