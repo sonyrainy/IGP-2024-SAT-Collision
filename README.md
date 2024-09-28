@@ -1,4 +1,4 @@
-**인디게임제작(Indie Game Production)_Tutorial 제작 프로젝트 입니다.**
+**인디게임제작(Indie Game Production)_Tutorial 제작 프로젝트입니다.**
 
 >**SAT와 AABB 이론을 활용해 충돌처리를 자체적으로 구현하였습니다.**
 
@@ -8,6 +8,9 @@
 
 ### 1. 프로젝트(게임) 특징
 >- **기본 조작**: wasd를 이용한 이동 및 점프, spacebar를 통한 공격
+>
+>+) 점프 및 하강 시, 중력가속도를 다르게 적용하여 조작감을 향상시키려고 하였습니다.
+>
 >- **클릭을 이용한 영역(TimeZone) 생성**: 마우스 클릭으로 화면 상 영역을 생성하여 그 내부에 들어오는 오브젝트의 시간이 빠르게 흐르도록(속도 증가) 설정
 
 
@@ -21,6 +24,66 @@
 
 <br>
 
+### 1.5. Vertex 추출 방식
+
+- **2D Sprite**
+  
+```
+void Start()
+    {
+        // SpriteRenderer를 통해 Sprite를 가져오기
+        Sprite sprite = GetComponent<SpriteRenderer>().sprite;
+
+        // Sprite의 꼭짓점(Vertex) 배열을 가져오기
+        Vector2[] spriteVertices = sprite.vertices;
+    }
+
+```
+
+<br>
+
+
+- **Mesh**
+```
+    private Mesh mesh;
+    private Vector3[] vertices;
+    void Start()
+    {
+        // MeshFilter에서 Mesh를 가져오기
+        mesh = GetComponent<MeshFilter>().mesh;
+
+        // Mesh의 꼭짓점(Vertex) 배열을 가져오기
+        vertices = mesh.vertices;
+    }
+
+```
+
+<br>
+
+
+- **PolygonCollider2D ✔**
+```
+    private PolygonCollider2D polyCollider;
+
+    // 꼭짓점 배열을 반환하는 함수
+public Vector2[] GetVertices()
+{
+    if (polyCollider != null)
+    {
+        // 꼭짓점을 월드 좌표계로 변환
+        return polyCollider.points.Select(point => (Vector2)transform.TransformPoint(point)).ToArray();
+    }
+    else
+    {
+        Debug.LogError($"{gameObject.name}에 PolygonCollider2D가 없습니다.");
+        return null;
+    }
+}
+```
+
+→ PolygonCollider2D를 통해 vertex를 추출하여 충돌 처리 구현에 활용하였습니다.
+
+<br>
 
 ### 2. AABB(Axis – Aligned Bounding Box), SAT(Seperating Axis Theorem)
 #### - AABB란?
@@ -57,7 +120,7 @@
 - **CollisionManager.cs**: 충돌할 수 있는 오브젝트를 관리하고, AABB(Axis-Aligned Bounding Box)와 SAT(Separating Axis Theorem)를 이용해 충돌 여부를 판단한다. AABB로 충돌 가능성을 판단 후, SAT 알고리즘으로 정밀한 충돌 여부를 검사(계산)한다.
 - **SATCollisionObject.cs**: 물체의 PolygonCollider2D에서 꼭짓점을 가져와 충돌 연산에 필요한 오브젝트의 정보를 CollisionManager에 넘겨준다.
 - **Bullet.cs**: 총알의 이동과 속도 관리 및 총알이 TimeZone과 충돌했을 때, 충돌을 빠져나갔을 때의 로직을 담당한다.
-- **PlayerController.cs**: 플레이어의 이동, 점프, 총알 발사 등의 기본적인 제어를 담당합니다. 플레이어가 TimeZone 안에 있을 때의 로직을 담당한다.
+- **PlayerController.cs**: 플레이어의 이동, 점프, 총알 발사 등의 기본적인 제어를 담당한다. 플레이어가 TimeZone 안에 있을 때의 로직을 담당한다.
 - **Enemy.cs**: 적의 체력 관리 및 데미지를 입거나, 죽는 로직을 담당한다.
 
 ---
