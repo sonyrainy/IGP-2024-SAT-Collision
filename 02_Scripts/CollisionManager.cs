@@ -5,12 +5,12 @@ public class CollisionManager : MonoBehaviour
 {
     public static CollisionManager Instance { get; private set; }
 
-    [SerializeField] private SATCollisionObject timeZoneSAT;  // 생성된 TimeZone의 SATCollisionObject
-    [SerializeField] private SATCollisionObject enemySAT;     // 적의 SATCollisionObject
-    [SerializeField] private SATCollisionObject playerSAT;    // 플레이어의 SATCollisionObject
-    [SerializeField] private List<SATCollisionObject> bullets = new List<SATCollisionObject>();  // 발사된 총알 목록
-
-    void Awake()
+    [SerializeField] private SATCollisionObject timeZoneSAT; 
+    [SerializeField] private SATCollisionObject enemySAT;  
+    [SerializeField] private SATCollisionObject playerSAT;  
+    [SerializeField] private List<SATCollisionObject> bullets = new List<SATCollisionObject>();  
+    
+        void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -23,34 +23,34 @@ public class CollisionManager : MonoBehaviour
         }
     }
 
-    // TimeZone 등록
+    
     public void RegisterTimeZone(SATCollisionObject timeZone)
     {
         timeZoneSAT = timeZone;
     }
 
-    // 플레이어 등록
+  
     public void RegisterPlayer(SATCollisionObject player)
     {
         playerSAT = player;
     }
 
-    // 적 등록
+ 
     public void RegisterEnemy(SATCollisionObject enemy)
     {
         enemySAT = enemy;
     }
 
-    // 총알 등록
+    
     public void RegisterBullet(SATCollisionObject bulletSAT)
     {
         if (!bullets.Contains(bulletSAT))
         {
-            bullets.Add(bulletSAT);  // 총알을 리스트에 추가
+            bullets.Add(bulletSAT);
         }
     }
 
-    // 충돌을 처리하는 함수
+    // 충돌 처리 함수
     public void HandleCollisions()
     {
         // Player와 TimeZone의 충돌 감지
@@ -60,15 +60,17 @@ public class CollisionManager : MonoBehaviour
 
             if (CheckCollision(playerSAT, timeZoneSAT))
             {
-                playerScript.EnterTimeZone();  // TimeZone 안에 있을 때 속도 증가
+                // TimeZone 안에 있을 때 속도 증가
+                playerScript.EnterTimeZone();  
             }
             else
             {
-                playerScript.ExitTimeZone();   // TimeZone을 벗어났을 때 속도 복원
+                // TimeZone을 벗어났을 때 속도 복원
+                playerScript.ExitTimeZone();   
             }
         }
 
-        // 모든 발사된 총알과 TimeZone 및 적 간의 충돌 감지
+        // 발사된 총알(들)과 TimeZone 및 enemy의 충돌 감지
         for (int i = bullets.Count - 1; i >= 0; i--)
         {
             SATCollisionObject bullet = bullets[i];
@@ -79,15 +81,17 @@ public class CollisionManager : MonoBehaviour
             {
                 if (CheckCollision(bullet, timeZoneSAT))
                 {
-                    bulletScript.EnterTimeZone();  // TimeZone 안에 있을 때 속도 증가
+                    // TimeZone 안에 있을 때 속도 증가되도록 함수 불러오기
+                    bulletScript.EnterTimeZone();  
                 }
                 else
                 {
-                    bulletScript.ExitTimeZone();   // TimeZone을 벗어났을 때 속도 복원
+                    // TimeZone을 벗어났을 때 속도 복원
+                    bulletScript.ExitTimeZone();   
                 }
             }
 
-            // 적과의 충돌 감지
+            // enemy와 bullet의 충돌 감지
             if (enemySAT != null && CheckCollision(bullet, enemySAT))
             {
                 Enemy enemyScript = enemySAT.GetComponent<Enemy>();
@@ -97,7 +101,6 @@ public class CollisionManager : MonoBehaviour
                     enemyScript.TakeDamage(damage);
                     Debug.Log($"총알이 적에게 {damage}만큼의 데미지를 입혔습니다.");
 
-                    // 총알 삭제
                     Destroy(bullet.gameObject);
                     bullets.RemoveAt(i);
                 }
@@ -105,7 +108,7 @@ public class CollisionManager : MonoBehaviour
         }
     }
 
-    // 충돌 감지 로직 (AABB + SAT)
+    // AABB와 SAT를 활용한 충돌 감지 로직
     public bool CheckCollision(SATCollisionObject objA, SATCollisionObject objB)
     {
         Vector2[] verticesA = objA.GetVertices();
@@ -113,7 +116,7 @@ public class CollisionManager : MonoBehaviour
 
         if (verticesA == null || verticesB == null)
         {
-            //Debug.LogError("꼭짓점 정보를 가져오는 데 실패했습니다.");
+            //Debug.LogError("꼭짓점 정보를 불러오지 못했습니다!");
             return false;
         }
 
@@ -171,16 +174,16 @@ public class CollisionManager : MonoBehaviour
             (float minA, float maxA) = Project(verticesA, axis);
             (float minB, float maxB) = Project(verticesB, axis);
 
-            Debug.Log($"축: {axis}, A의 투영: {minA} ~ {maxA}, B의 투영: {minB} ~ {maxB}");
+            Debug.Log($"축 위치: {axis}, A가 투영된 범위: {minA} ~ {maxA}, B가 투영된 범위: {minB} ~ {maxB}");
 
             if (maxA < minB || minA > maxB)
             {
-                Debug.Log("충돌하지 않음 (분리 축 발견)");
+                Debug.Log("조건에 맞지 않아 충돌 X로 판단(즉, 분리 축 발견)");
                 return false;
             }
         }
 
-        Debug.Log("충돌 발생!");
+        Debug.Log("충돌 발생");
         return true;
     }
 

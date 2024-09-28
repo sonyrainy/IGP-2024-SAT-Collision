@@ -2,25 +2,23 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float health = 100f;  // 적의 체력
+    public float health = 100f;  
 
-    // 적에게 데미지를 입히는 함수
+    // 적이 데미지를 입는 함수
     public void TakeDamage(float damage)
     {
         health -= damage;
-        Debug.Log($"Enemy took {damage} damage! Remaining health: {health}");
+        Debug.Log($"Enemy가 {damage}의 데미지를 받았고, 현재 적의 체력은 {health}이다.");
 
-        // 체력이 0 이하일 때 적 제거
         if (health <= 0)
         {
             Die();
         }
     }
 
-    // 적이 죽는 함수
     void Die()
     {
-        Debug.Log("Enemy died!");
-        Destroy(gameObject);  // 적 오브젝트 삭제
+        Debug.Log("적의 HP가 0 이하가 되었다.");
+        Destroy(gameObject); 
     }
 }

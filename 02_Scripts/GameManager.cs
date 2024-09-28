@@ -4,25 +4,30 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public GameObject timeZonePrefab;        // TimeZone 프리팹
-    public float timeZoneLifetime = 5f;      // TimeZone이 유지되는 시간
+    public GameObject timeZonePrefab;   
+
+
+    // TimeZone이 유지되는 시간
+    public float timeZoneLifetime = 5f;      
 
     void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject);  // 이미 존재하는 인스턴스가 있으면 파괴
+            // 이미 존재하는 인스턴스가 있으면 파괴
+            Destroy(gameObject);  
         }
         else
         {
-            Instance = this;  // 현재 인스턴스를 설정
-            DontDestroyOnLoad(gameObject);  // 씬 전환 시에도 파괴되지 않도록 설정
+            //씬 전환 시에도 파괴되지 않도록 함.
+            Instance = this;  
+            DontDestroyOnLoad(gameObject);
         }
     }
 
     void Update()
     {
-        // 마우스 좌클릭으로 TimeZone 생성
+        // 마우스 좌클릭, TimeZone 생성
         if (Input.GetMouseButtonDown(0))
         {
             CreateTimeZone();
@@ -31,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        // 충돌 처리를 CollisionManager로 위임
+        // 충돌 처리를 CollisionManager에서 돌아가도록 하기
         CollisionManager.Instance.HandleCollisions();
     }
 
@@ -40,17 +45,19 @@ public class GameManager : MonoBehaviour
     {
         // 마우스 클릭한 위치를 가져오기
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0f;  // 2D이므로 z값을 0으로 설정
+
+        // 2D에서 진행 중이기 때문에 z값을 0으로 설정
+        mousePos.z = 0f;  
 
         // TimeZone 오브젝트 생성
         GameObject timeZone = Instantiate(timeZonePrefab, mousePos, Quaternion.identity);
 
-        // SATCollisionObject를 CollisionManager에 등록
+        // 생성된 TimeZone을 CollisionManager에 등록하기
         SATCollisionObject timeZoneSAT = timeZone.GetComponent<SATCollisionObject>();
         if (timeZoneSAT == null)
         {
-            timeZoneSAT = timeZone.AddComponent<SATCollisionObject>();  // SATCollisionObject가 없으면 추가
-        }
+            // 생성된 TimeZone에 SATCollisionObject가 없으면 추가하기
+            timeZoneSAT = timeZone.AddComponent<SATCollisionObject>();   }
 
         CollisionManager.Instance.RegisterTimeZone(timeZoneSAT);
 

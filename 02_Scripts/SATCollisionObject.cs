@@ -12,7 +12,7 @@ public class SATCollisionObject : MonoBehaviour
 
         if (polyCollider == null)
         {
-            //Debug.LogError($"{gameObject.name}에 PolygonCollider2D가 없습니다.");
+            //Debug.LogError($"{gameObject.name}에 PolygonCollider2D가 없다.");
         }
     }
 
@@ -21,7 +21,7 @@ public class SATCollisionObject : MonoBehaviour
     {
         if (polyCollider != null)
         {
-            // 꼭짓점을 월드 좌표계로 변환하여 반환
+            // 꼭짓점을 월드 좌표계로 변환하여 사용하기 위한..
             return polyCollider.points.Select(point => (Vector2)transform.TransformPoint(point)).ToArray();
         }
         else
