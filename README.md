@@ -116,8 +116,8 @@ public Vector2[] GetVertices()
 
 ### 3. 스크립트별 역할
 
-- **GameManager.cs**: TimeZone을 생성한다. 게임 과정 중, 충돌 처리 여부를 CollisionManager를 통해 진행되도록 한다.
-- **CollisionManager.cs**: 충돌할 수 있는 오브젝트를 관리하고, AABB(Axis-Aligned Bounding Box)와 SAT(Separating Axis Theorem)를 이용해 충돌 여부를 판단한다. AABB로 충돌 가능성을 판단 후, SAT 알고리즘으로 정밀한 충돌 여부를 검사(계산)한다.
+- **GameManager.cs**: TimeZone을 생성한다. 충돌 로직을 제외한 게임 흐름에 대한 게임 로직을 담당(예정)한다.
+- **CollisionManager.cs**: 충돌할 수 있는 오브젝트를 관리하고, AABB(Axis-Aligned Bounding Box)와 SAT(Separating Axis Theorem)를 이용해 충돌 여부를 판단한다. AABB로 충돌 가능성을 판단 후, SAT 알고리즘으로 정밀한 충돌 여부를 검사(계산)한다. 게임 충돌 로직을 관리하고, 충돌을 검사한다.
 - **SATCollisionObject.cs**: 물체의 PolygonCollider2D에서 꼭짓점을 가져와 충돌 연산에 필요한 오브젝트의 정보를 CollisionManager에 넘겨준다.
 - **Bullet.cs**: 총알의 이동과 속도 관리 및 총알이 TimeZone과 충돌했을 때, 충돌을 빠져나갔을 때의 로직을 담당한다.
 - **PlayerController.cs**: 플레이어의 이동, 점프, 총알 발사 등의 기본적인 제어를 담당한다. 플레이어가 TimeZone 안에 있을 때의 로직을 담당한다.
