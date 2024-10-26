@@ -123,6 +123,10 @@ public Vector2[] GetVertices()
 - **PlayerController.cs**: 플레이어의 이동, 점프, 총알 발사 등의 기본적인 제어를 담당한다. 플레이어가 TimeZone 안에 있을 때의 로직을 담당한다.
 - **Enemy.cs**: 적의 체력 관리 및 데미지를 입거나, 죽는 로직을 담당한다.
 
+<br>
+
+최종 영상: https://youtu.be/k8w_UgUpgv8
+
 ---
 
 
